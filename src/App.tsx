@@ -1,5 +1,11 @@
+import BasicForm from './components/UserForm/UserForm';
+
 function App() {
-  return <div>ts tutorial</div>;
+  return (
+    <>
+      <BasicForm />
+    </>
+  );
 }
 
 export default App;
