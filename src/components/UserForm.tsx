@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { UserFormInfo } from './UserForm.model';
+import { UserFormInfo } from '../model/UserForm.model';
+import { Link } from 'react-router-dom';
 import {
   firstNameOptions,
   lastNameOptions,
@@ -8,14 +9,13 @@ import {
   cityOptions,
   postalCodeOptions,
   provinceOptions,
-} from './UserRegister';
+} from '../register/UserRegister';
 
-export default function BasicForm() {
+export default function UserForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setValue,
+    formState: { isSubmitSuccessful, errors },
   } = useForm<UserFormInfo>({
     mode: 'all',
     defaultValues: {
@@ -34,11 +34,11 @@ export default function BasicForm() {
     <section>
       <form
         onSubmit={handleSubmit((data) => {
+          // TODO: do this logic on review page
+          // const { street, city, province, postalCode } = data;
+          // const address = `${street}, ${city}, ${province} ${postalCode}`;
+          // setValue('address', address);
           console.log('data: ', data);
-
-          const { street, city, province, postalCode } = data;
-          const address = `${street}, ${city}, ${province} ${postalCode}`;
-          setValue('address', address);
         })}
       >
         <article>
@@ -47,7 +47,6 @@ export default function BasicForm() {
             <input
               className="border border-slate-500"
               {...register('firstName', firstNameOptions)}
-              name="firstName"
               placeholder="Enter first name"
             />
             <span className="text-red-600">{errors.firstName?.message}</span>
@@ -55,7 +54,6 @@ export default function BasicForm() {
             <input
               className="border border-slate-500"
               {...register('lastName', lastNameOptions)}
-              name="lastName"
               placeholder="Enter last name"
             />
             <span className="text-red-600">{errors.lastName?.message}</span>
@@ -65,7 +63,6 @@ export default function BasicForm() {
             <input
               className="border border-slate-500"
               {...register('phoneNumber', phoneNumberOptions)}
-              name="phoneNumber"
               placeholder="Enter phone number"
             />
             <span className="text-red-600">{errors.phoneNumber?.message}</span>
@@ -76,7 +73,6 @@ export default function BasicForm() {
               <input
                 className="border border-slate-500"
                 {...register('street', streetOptions)}
-                name="street"
                 placeholder="Street number/name (eg. #Unit 123-123 Main st)"
               />
               <span className="text-red-600">{errors.street?.message}</span>
@@ -84,7 +80,6 @@ export default function BasicForm() {
               <input
                 className="border border-slate-500"
                 {...register('city', cityOptions)}
-                name="city"
                 placeholder="City (optional)"
               />
               <span className="text-red-600">{errors.city?.message}</span>
@@ -94,11 +89,9 @@ export default function BasicForm() {
               <select
                 className="border border-slate-500"
                 {...register('province', provinceOptions)}
-                name="province"
-                id="province"
               >
                 <option value="" disabled>
-                  Province
+                  Please select province
                 </option>
                 <option value="AB">Alberta</option>
                 <option value="BC">British Columbia</option>
@@ -119,7 +112,6 @@ export default function BasicForm() {
               <input
                 className="border border-slate-500"
                 {...register('postalCode', postalCodeOptions)}
-                name="postalCode"
                 placeholder="Postal code (eg. M2K0N5 or M2K 0N5)"
               />
               <span className="text-red-600">{errors.postalCode?.message}</span>
@@ -127,18 +119,12 @@ export default function BasicForm() {
           </section>
         </article>
 
-        <article>
-          <h3>Your favorite Pokemon</h3>
-          <input
-            className="border border-slate-500"
-            {...register('pokemon')}
-            name="pokemon"
-            placeholder="Search Pokemon"
-          />
-          <span className="text-red-600">{errors.pokemon?.message}</span>
-        </article>
+        <button type="submit">Save</button>
 
-        <input type="submit" />
+        <Link to="/favorite-pokemon">
+          {/* TOOD: either store the state or capture the register */}
+          <button disabled={!isSubmitSuccessful}>Continue</button>
+        </Link>
       </form>
     </section>
   );

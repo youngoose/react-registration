@@ -1,6 +1,6 @@
 const namePattern = /^[a-zA-Z ]*$/;
 const phoneNumberPattern = /\d{10}/;
-const streetPattern = /^[a-zA-Z0-9\- \#]+$/;
+const streetPattern = /^[a-zA-Z0-9\- #]+$/;
 const postalCodePattern = /^[A-Za-z]\d[A-Za-z][ ]?\d[A-Za-z]\d$/;
 
 export const firstNameOptions = {
