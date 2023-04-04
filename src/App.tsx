@@ -1,9 +1,9 @@
-import BasicForm from './components/UserForm/UserForm';
+import UserForm from './components/UserForm';
 
 function App() {
   return (
     <>
-      <BasicForm />
+      <UserForm />
     </>
   );
 }

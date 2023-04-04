@@ -1,15 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import NotFound from './pages/NotFound';
+import FavoritePokemon from './pages/FavoritePokemon';
+import Review from './pages/Review';
+import Root from './pages/Root';
+import BasicInfo from './pages/BasicInfo';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Root />,
+    errorElement: <NotFound />,
+    children: [
+      { index: true, element: <BasicInfo /> },
+      { path: '/favorite-pokemon', element: <FavoritePokemon /> },
+      { path: '/review', element: <Review /> },
+    ],
+  },
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
