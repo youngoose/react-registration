@@ -2,7 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from 'react-router-dom';
 import NotFound from './pages/NotFound';
 import FavoritePokemon from './pages/FavoritePokemon';
 import Review from './pages/Review';
@@ -15,7 +19,8 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <NotFound />,
     children: [
-      { index: true, element: <BasicInfo /> },
+      { path: '/', element: <Navigate to="/basic-info" replace /> },
+      { path: '/basic-info', element: <BasicInfo /> },
       { path: '/favorite-pokemon', element: <FavoritePokemon /> },
       { path: '/review', element: <Review /> },
     ],

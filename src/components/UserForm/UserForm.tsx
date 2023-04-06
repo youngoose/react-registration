@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { UserFormInfo } from '../model/UserForm.model';
+import { UserFormInfo } from './UserForm.model';
 import { Link } from 'react-router-dom';
 import {
   firstNameOptions,
@@ -9,7 +9,7 @@ import {
   cityOptions,
   postalCodeOptions,
   provinceOptions,
-} from '../register/UserRegister';
+} from '../../register/UserRegister';
 
 export default function UserForm() {
   const {
