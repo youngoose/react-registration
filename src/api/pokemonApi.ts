@@ -2,9 +2,6 @@ import axios from 'axios';
 import { PokemonInfo } from '../components/Pokemon/Pokemon.model';
 
 export default class PokemonApi {
-  // private readonly mockUrl = '/pokemon/pokemon.json';
-  private readonly limit = 1000;
-
   image = (id: PokemonInfo['id']) =>
     `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
@@ -12,21 +9,21 @@ export default class PokemonApi {
     baseURL: `https://pokeapi.co/api/v2`,
   });
 
-  async getPokemon() {
-    console.log('fetching...');
+  getPokemon = async (offset: number, limit: number) => {
     return this.httpClient
       .get('pokemon', {
         params: {
-          limit: this.limit,
+          limit,
+          offset,
         },
       })
       .then((res) =>
         res.data.results.map((pokemon: PokemonInfo, index: number) => ({
           name: pokemon.name,
-          id: index + 1,
-          image: this.image(index + 1),
+          id: offset + index + 1,
+          image: this.image(offset + index + 1),
         }))
       )
       .catch((error) => console.log(error));
-  }
+  };
 }

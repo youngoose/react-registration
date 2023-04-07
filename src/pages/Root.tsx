@@ -12,7 +12,7 @@ export default function Root() {
       <Navbar />
       <QueryClientProvider client={queryClient}>
         <Outlet />
-        <ReactQueryDevtools initialIsOpen={true} />
+        {/* <ReactQueryDevtools initialIsOpen={true} /> */}
       </QueryClientProvider>
     </>
   );

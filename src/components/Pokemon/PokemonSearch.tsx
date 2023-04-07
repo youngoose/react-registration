@@ -7,19 +7,30 @@ import SearchBar from './SearchBar';
 
 export default function PokemonSearch() {
   const pokemonApi = new PokemonApi();
+  const [pokemonList, setPokemonList] = useState([]);
   const [searchedPokemonResults, setSearchedPokemonResults] = useState([]);
+  const limit = 50;
+  const [offset, setOffset] = useState(0);
+
   const {
     isLoading,
     error,
     data: pokemons,
   } = useQuery(
-    ['pokemons'],
+    ['pokemons', offset],
     () => {
-      const fetchedPokemonData = pokemonApi.getPokemon();
-      fetchedPokemonData.then((pokemons) => {
-        setSearchedPokemonResults(pokemons);
-      });
-      return fetchedPokemonData;
+      const fetchedPokemon = pokemonApi
+        .getPokemon(offset, limit)
+        .then((initialPokemons) => {
+          console.log(initialPokemons);
+          setPokemonList([...pokemonList, ...initialPokemons] as any);
+          setSearchedPokemonResults([
+            ...pokemonList,
+            ...initialPokemons,
+          ] as any);
+          return initialPokemons;
+        });
+      return fetchedPokemon;
     },
     { staleTime: 1000 * 60 * 5 }
   );
@@ -27,7 +38,7 @@ export default function PokemonSearch() {
   return (
     <>
       <SearchBar
-        pokemons={pokemons}
+        pokemons={pokemonList}
         setSearchedPokemonResults={setSearchedPokemonResults}
       />
       <>
@@ -40,6 +51,13 @@ export default function PokemonSearch() {
             ))}
         </ul>
       </>
+      <button
+        onClick={() => {
+          setOffset(offset + limit);
+        }}
+      >
+        Show more
+      </button>
     </>
   );
 }
