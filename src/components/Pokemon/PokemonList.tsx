@@ -26,9 +26,9 @@ export default function PokemonList({
           onClick={handleChange}
         >
           <li className="flex flex-col items-center text-blue-900 text-center hover:bg-basic active:bg-basic rounded-xl pb-1 font-bold">
-            <img className="" src={image} alt={name} />
+            <img src={image} alt={name} />
             <label htmlFor={name}>
-              {index + 1}. {name}
+              {index}. {name}
             </label>
           </li>
         </div>
