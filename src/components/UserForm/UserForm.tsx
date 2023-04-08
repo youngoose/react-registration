@@ -11,8 +11,17 @@ import {
   provinceOptions,
 } from '../../register/UserRegister';
 import Button from '../ui/Button';
+import { useState } from 'react';
+import useSetUserState from '../../hooks/useSetUserState';
+import getStatesFromLocalStorage from '../../util/getStatesFromLocalStorage';
 
 export default function UserForm() {
+  const [personalInfo, setPersonalInfo] = useState<UserFormInfo>(() =>
+    getStatesFromLocalStorage('userInformation')
+  );
+
+  useSetUserState('userInformation', personalInfo);
+
   const {
     register,
     handleSubmit,
@@ -20,14 +29,13 @@ export default function UserForm() {
   } = useForm<UserFormInfo>({
     mode: 'all',
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-      address: '',
-      street: '',
-      city: '',
-      province: '',
-      postalCode: '',
+      firstName: personalInfo.firstName ? personalInfo.firstName : '',
+      lastName: personalInfo.lastName ? personalInfo.lastName : '',
+      phoneNumber: personalInfo.phoneNumber ? personalInfo.phoneNumber : '',
+      street: personalInfo.street ? personalInfo.street : '',
+      city: personalInfo.city ? personalInfo.city : '',
+      province: personalInfo.province ? personalInfo.province : '',
+      postalCode: personalInfo.postalCode ? personalInfo.postalCode : '',
     },
   });
 
@@ -36,23 +44,20 @@ export default function UserForm() {
       <form
         className="container max-w-screen-lg mx-auto"
         onSubmit={handleSubmit((data) => {
-          // TODO: do this logic on review page
-          // const { street, city, province, postalCode } = data;
-          // const address = `${street}, ${city}, ${province} ${postalCode}`;
-          // setValue('address', address);
-          console.log('data: ', data);
+          setPersonalInfo(data);
         })}
       >
         <article className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
           <div className="text-gray-600">
             <h3 className="font-semibold text-xl">Personal Details</h3>
             <p className="text-gray-500 mb-6">
-              Please fill out all the fields. Save and Continue.
+              Please fill out all the fields. Save on your device and continue.
             </p>
           </div>
 
           <div>
             <section>
+              {}
               <input
                 className="h-10 border rounded px-4 md:w-1/4 w-full"
                 {...register('firstName', firstNameOptions)}
@@ -72,9 +77,9 @@ export default function UserForm() {
               </span>
             </section>
 
-            <section className="mt-2">
+            <section className="mt-2 md:mt-4">
               <input
-                className="h-10 border rounded px-4 md:w-3/6 w-full"
+                className="h-10 border rounded px-4 md:w-2/6 w-full"
                 {...register('phoneNumber', phoneNumberOptions)}
                 placeholder="Enter phone number"
               />
@@ -86,7 +91,7 @@ export default function UserForm() {
             <section className="mt-2">
               <div>
                 <input
-                  className="h-10 border rounded px-4"
+                  className="h-10 border rounded px-4 md:w-2/6 w-full"
                   {...register('street', streetOptions)}
                   placeholder="Street (123-123 Main st)"
                 />
@@ -153,7 +158,6 @@ export default function UserForm() {
         />
 
         <Link to="/favorite-pokemon">
-          {/* TOOD: either store the state or capture the register */}
           <button
             className={
               !isSubmitSuccessful

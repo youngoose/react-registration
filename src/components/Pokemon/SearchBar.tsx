@@ -27,12 +27,12 @@ export default function SearchBar({
     <header className="mb-5">
       <form className="w-full flex justify-center" onSubmit={handleSearch}>
         <input
-          className="w-7/12 p-2 border border-blue-900 bg-yellow-500 text-black border-double placeholder:text-blue-700 font-bold"
+          className="w-7/12 p-2 outline-none bg-yellow-500 placeholder:text-blue-700 font-bold"
           type="text"
           placeholder="Search pokemon..."
           onChange={handleChange}
         />
-        <button className="px-4 bg-yellow-500 border border-blue-900 font-bold">
+        <button className="px-4 bg-yellow-500 text-blue-900 font-bold">
           <BsSearch />
         </button>
       </form>
