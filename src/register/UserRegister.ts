@@ -40,7 +40,7 @@ export const phoneNumberOptions = {
 };
 
 export const streetOptions = {
-  required: 'Street number/name is required.',
+  required: 'Street is required.',
   maxLength: {
     value: 30,
     message: 'The maximum length is 30 characters.',
@@ -52,6 +52,7 @@ export const streetOptions = {
 };
 
 export const cityOptions = {
+  required: 'Please enter city.',
   maxLength: {
     value: 20,
     message: 'The maximum length is 20 characters.',

@@ -1,32 +1,30 @@
 import axios from 'axios';
 import { PokemonInfo } from '../components/Pokemon/Pokemon.model';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class PokemonApi {
-  // private readonly mockUrl = '/pokemon/pokemon.json';
-  private readonly limit = 1000;
-
-  image = (id: PokemonInfo['id']) =>
+  image = (id: number) =>
     `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
   httpClient = axios.create({
     baseURL: `https://pokeapi.co/api/v2`,
   });
 
-  async getPokemon() {
-    console.log('fetching...');
+  getPokemon = async (offset: number, limit: number) => {
     return this.httpClient
       .get('pokemon', {
         params: {
-          limit: this.limit,
+          limit,
+          offset,
         },
       })
       .then((res) =>
         res.data.results.map((pokemon: PokemonInfo, index: number) => ({
           name: pokemon.name,
-          id: index + 1,
-          image: this.image(index + 1),
+          id: uuidv4(),
+          image: this.image(offset + index + 1),
         }))
       )
       .catch((error) => console.log(error));
-  }
+  };
 }
