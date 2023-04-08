@@ -4,10 +4,12 @@ import Button from '../components/ui/Button';
 import getStatesFromLocalStorage from '../util/getStatesFromLocalStorage';
 import { UserFormInfo } from '../components/UserForm/UserForm.model';
 import { PokemonInfo } from '../components/Pokemon/Pokemon.model';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 
 export default function Review() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [success, setSuccess] = useState() as any;
+  const [redirect, setRedirect] = useState() as any;
   const [isUploading, setIsUploading] = useState(false);
 
   const navigate = useNavigate();
@@ -38,9 +40,8 @@ export default function Review() {
 
     promise
       .then(() => {
-        setSuccess(
-          'Your information has been successfully uploaded. Redirecting to a new registration... :)'
-        );
+        setSuccess('Your information has been successfully uploaded.');
+        setRedirect('Redirecting to a new registration.');
         setTimeout(() => {
           setSuccess(null);
           setIsConfirmed(false);
@@ -56,10 +57,26 @@ export default function Review() {
   };
 
   return (
-    <form className="overflow-hidden min-h-[700px]">
-      {success && (
-        <p className="bg-orange-300 flex justify-center">✅ {success}</p>
+    <form className="overflow-hidden min-h-[700px] relative">
+      {success && redirect && (
+        <div className="absolute flex items-center justify-center top-1/4 w-full">
+          <div
+            className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md"
+            role="alert"
+          >
+            <div className="flex">
+              <div className="py-1">
+                <AiOutlineInfoCircle className="w-8 h-5" />
+              </div>
+              <div>
+                <p className="font-bold text-2xl">{success}</p>
+                <p className="text-xl mt-3">{redirect}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
+
       <div className="overflow-hidden text-gray-600">
         <section className="min-h-screen p-6 bg-gray-100 ">
           <div className="container max-w-screen-lg mx-auto bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -120,15 +137,15 @@ export default function Review() {
               </div>
             </div>
 
-            <div className="flex justify-center mt-5">
+            <div className="flex items-center justify-center mt-3">
               <input
-                className="w-4"
+                className="w-auto flex-[0_0_9%] md:flex-[0_0_4%]"
                 type="checkbox"
                 id="agree"
                 checked={isConfirmed}
                 onClick={() => setIsConfirmed(!isConfirmed)}
               />
-              <label className="ml-1" htmlFor="agree">
+              <label className="pl-2 sm:p-0 font-bold w-full" htmlFor="agree">
                 Check here to indicate that you have read and agree to submit
                 your information to our service.
               </label>
