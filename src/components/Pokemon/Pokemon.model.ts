@@ -1,5 +1,6 @@
 export interface PokemonInfo {
   name?: string;
-  id?: number;
+  id?: string;
   image?: string;
+  isFavorite?: boolean;
 }

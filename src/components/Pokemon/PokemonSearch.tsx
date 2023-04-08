@@ -4,60 +4,145 @@ import PokemonList from './PokemonList';
 import { PokemonInfo } from './Pokemon.model';
 import PokemonApi from '../../api/pokemonApi';
 import SearchBar from './SearchBar';
+import Button from '../ui/Button';
+import PrevNextButton from '../ui/PrevNextButton';
 
 export default function PokemonSearch() {
   const pokemonApi = new PokemonApi();
   const [pokemonList, setPokemonList] = useState([]);
   const [searchedPokemonResults, setSearchedPokemonResults] = useState([]);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
   const limit = 50;
   const [offset, setOffset] = useState(0);
+  const [favoritePokemon, setFavoritePokemon] = useState<PokemonInfo>({});
 
   const {
     isLoading,
     error,
     data: pokemons,
-  } = useQuery(
-    ['pokemons', offset],
-    () => {
-      const fetchedPokemon = pokemonApi
-        .getPokemon(offset, limit)
-        .then((initialPokemons) => {
-          console.log(initialPokemons);
-          setPokemonList([...pokemonList, ...initialPokemons] as any);
-          setSearchedPokemonResults([
-            ...pokemonList,
-            ...initialPokemons,
-          ] as any);
-          return initialPokemons;
-        });
-      return fetchedPokemon;
-    },
-    { staleTime: 1000 * 60 * 5 }
-  );
+  } = useQuery(['pokemons', offset], () => {
+    const fetchedPokemon = pokemonApi
+      .getPokemon(offset, limit)
+      .then((initialPokemons) => {
+        // console.log(initialPokemons);
+        setPokemonList([...pokemonList, ...initialPokemons] as any);
+        setSearchedPokemonResults([...pokemonList, ...initialPokemons] as any);
+        return initialPokemons;
+      });
+    return fetchedPokemon;
+  });
+
+  const onChange = (favoritePokemon: PokemonInfo) => {
+    setFavoritePokemon(favoritePokemon);
+    setIsSubmitSuccessful(true);
+  };
+
+  console.log(favoritePokemon);
 
   return (
     <>
-      <SearchBar
-        pokemons={pokemonList}
-        setSearchedPokemonResults={setSearchedPokemonResults}
-      />
-      <>
-        {isLoading && <p>Loading...</p>}
-        {error && <p>Something is wrong 😖</p>}
-        <ul className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-3 gap-y-4 mx-4">
-          {searchedPokemonResults &&
-            searchedPokemonResults.map((pokemon: PokemonInfo) => (
-              <PokemonList pokemon={pokemon} key={pokemon.id} />
-            ))}
-        </ul>
-      </>
-      <button
-        onClick={() => {
-          setOffset(offset + limit);
-        }}
-      >
-        Show more
-      </button>
+      {Object.keys(favoritePokemon).length > 0 && (
+        <div className="relative">
+          <div className="flex justify-center ">
+            <img
+              className="h-[150px]"
+              src="/images/pokeCatch.png"
+              alt="pokemon catch icon"
+            />
+            <img
+              className="h-30 w-30 fixed top-[140px]"
+              src={favoritePokemon.image}
+              alt={favoritePokemon.name}
+            />
+          </div>
+
+          <div className="flex flex-col items-center justify-center my-5">
+            <pre>Your favorite pokemon is...</pre>
+            <strong className="text-blue-600 text-2xl text-bold bg-yellow-500">
+              {favoritePokemon.name}
+            </strong>
+          </div>
+
+          <div className="flex justify-center">
+            <Button
+              customStyle={
+                'bg-basic hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2'
+              }
+              text={'Search again?'}
+              onClick={() => {
+                setFavoritePokemon({});
+                setIsSubmitSuccessful(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {Object.keys(favoritePokemon).length === 0 && (
+        <>
+          <div className="flex flex-col items-center justify-center">
+            <div className="inline-flex items-center">
+              <img
+                className="h-10"
+                src="/images/pokeCatch.png"
+                alt="pokemon catch icon"
+              />
+              <span className="ml-2 text-lg text-blue-900">
+                Select Your Favorite pokemon with
+              </span>
+
+              <img
+                className="ml-2 h-10"
+                src="/images/pokeCatch.png"
+                alt="pokemon catch icon"
+              />
+            </div>
+
+            <a
+              href="https://pokeapi.co/"
+              className="w-[200px] h-[200px] -m-[60px]"
+            >
+              <img src="/images/pokeLogo.png" alt="pokemon api logo" />
+            </a>
+          </div>
+
+          <SearchBar
+            pokemons={pokemons}
+            setSearchedPokemonResults={setSearchedPokemonResults}
+          />
+          <>
+            {isLoading && <p>Loading...</p>}
+            {error && <p>Something is wrong 😖</p>}
+            <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 gap-y-4 mx-4">
+              {searchedPokemonResults &&
+                searchedPokemonResults.map(
+                  (pokemon: PokemonInfo, index: number) => (
+                    <PokemonList
+                      key={index}
+                      pokemon={pokemon}
+                      onFavoriteChange={onChange}
+                      index={index}
+                    />
+                  )
+                )}
+            </ul>
+          </>
+
+          <div className="flex justify-center mt-5">
+            <Button
+              customStyle={
+                'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded max-w-[120px]'
+              }
+              text={'Show more'}
+              onClick={() => {
+                setOffset(offset + limit);
+              }}
+            />
+          </div>
+        </>
+      )}
+
+      <PrevNextButton onSuccessSubmit={isSubmitSuccessful} />
     </>
   );
 }

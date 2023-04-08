@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { SetStateAction, useState } from 'react';
 import { PokemonInfo } from './Pokemon.model';
 
-export default function PokemonList({ pokemon }: { pokemon: PokemonInfo }) {
-  const { name, id, image } = pokemon;
+export default function PokemonList({
+  pokemon,
+  onFavoriteChange,
+  index,
+}: {
+  pokemon: PokemonInfo;
+  onFavoriteChange: SetStateAction<any>;
+  index: number;
+}) {
+  const [favoriteChecked, setFavoriteChecked] = useState(true);
+  const { name, image } = pokemon;
+
+  const handleChange = () => {
+    onFavoriteChange(pokemon);
+    setFavoriteChecked(false);
+  };
 
   return (
-    <li className="flex flex-col items-center bg-gray-100 text-gray-800 text-center rounded-lg shadow-sm hover:shadow-md w-30 h-[130px]">
-      <img className="h-30 w-30" src={image} alt={name} />
-      <h2>
-        {id}. {name}
-      </h2>
-    </li>
+    <>
+      {favoriteChecked && (
+        <div
+          className="border border-blue-900 bg-yellow-500 rounded-xl"
+          onClick={handleChange}
+        >
+          <li className="flex flex-col items-center text-blue-900 text-center hover:bg-basic active:bg-basic rounded-xl pb-1 font-bold">
+            <img className="" src={image} alt={name} />
+            <label htmlFor={name}>
+              {index + 1}. {name}
+            </label>
+          </li>
+        </div>
+      )}
+    </>
   );
 }

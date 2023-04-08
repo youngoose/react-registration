@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { PokemonInfo } from './Pokemon.model';
 
@@ -7,7 +7,7 @@ export default function SearchBar({
   setSearchedPokemonResults,
 }: {
   pokemons: PokemonInfo[];
-  setSearchedPokemonResults: any;
+  setSearchedPokemonResults: SetStateAction<any>;
 }) {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,15 +24,15 @@ export default function SearchBar({
   };
 
   return (
-    <header>
+    <header className="mb-5">
       <form className="w-full flex justify-center" onSubmit={handleSearch}>
         <input
-          className="w-7/12 p-2 border-none outline-none bg-black text-gray-50"
+          className="w-7/12 p-2 border border-blue-900 bg-yellow-500 text-black border-double placeholder:text-blue-700 font-bold"
           type="text"
           placeholder="Search pokemon..."
           onChange={handleChange}
         />
-        <button className="bg-zinc-600 px-4">
+        <button className="px-4 bg-yellow-500 border border-blue-900 font-bold">
           <BsSearch />
         </button>
       </form>
