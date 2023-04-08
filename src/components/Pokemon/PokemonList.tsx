@@ -8,7 +8,7 @@ export default function PokemonList({
 }: {
   pokemon: PokemonInfo;
   onFavoriteChange: SetStateAction<any>;
-  index: number;
+  index: any;
 }) {
   const [favoriteChecked, setFavoriteChecked] = useState(true);
   const { name, image } = pokemon;

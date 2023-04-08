@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { PokemonInfo } from '../components/Pokemon/Pokemon.model';
-import { v4 as uuidv4 } from 'uuid';
 
 export default class PokemonApi {
   image = (id: number) =>
@@ -21,7 +20,7 @@ export default class PokemonApi {
       .then((res) =>
         res.data.results.map((pokemon: PokemonInfo, index: number) => ({
           name: pokemon.name,
-          id: uuidv4(),
+          id: offset + index + 1,
           image: this.image(offset + index + 1),
         }))
       )

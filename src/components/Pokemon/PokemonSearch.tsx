@@ -6,15 +6,23 @@ import PokemonApi from '../../api/pokemonApi';
 import SearchBar from './SearchBar';
 import Button from '../ui/Button';
 import PrevNextButton from '../ui/PrevNextButton';
+import useSetUserState from '../../hooks/useSetUserState';
+import getStatesFromLocalStorage from '../../util/getStatesFromLocalStorage';
 
 export default function PokemonSearch() {
   const pokemonApi = new PokemonApi();
   const [pokemonList, setPokemonList] = useState([]);
   const [searchedPokemonResults, setSearchedPokemonResults] = useState([]);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(() => {
+    const favoritePokemon: PokemonInfo =
+      getStatesFromLocalStorage('favoritePokemon');
+    return Object.keys(favoritePokemon).length > 0 ? true : false;
+  });
   const limit = 50;
   const [offset, setOffset] = useState(0);
-  const [favoritePokemon, setFavoritePokemon] = useState<PokemonInfo>({});
+  const [favoritePokemon, setFavoritePokemon] = useState<PokemonInfo>(() =>
+    getStatesFromLocalStorage('favoritePokemon')
+  );
 
   const {
     isLoading,
@@ -24,7 +32,6 @@ export default function PokemonSearch() {
     const fetchedPokemon = pokemonApi
       .getPokemon(offset, limit)
       .then((initialPokemons) => {
-        // console.log(initialPokemons);
         setPokemonList([...pokemonList, ...initialPokemons] as any);
         setSearchedPokemonResults([...pokemonList, ...initialPokemons] as any);
         return initialPokemons;
@@ -37,7 +44,7 @@ export default function PokemonSearch() {
     setIsSubmitSuccessful(true);
   };
 
-  console.log(favoritePokemon);
+  useSetUserState('favoritePokemon', favoritePokemon);
 
   return (
     <>
@@ -50,7 +57,7 @@ export default function PokemonSearch() {
               alt="pokemon catch icon"
             />
             <img
-              className="h-30 w-30 fixed top-[140px]"
+              className="absolute h-30 w-30 top-[20px]"
               src={favoritePokemon.image}
               alt={favoritePokemon.name}
             />
@@ -121,7 +128,7 @@ export default function PokemonSearch() {
                       key={index}
                       pokemon={pokemon}
                       onFavoriteChange={onChange}
-                      index={index}
+                      index={pokemon.id}
                     />
                   )
                 )}
