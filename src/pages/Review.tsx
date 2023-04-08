@@ -48,7 +48,6 @@ export default function Review() {
       })
       .finally(() => {
         setIsUploading(true);
-
         setTimeout(() => {
           localStorage.clear();
           navigate('/');
