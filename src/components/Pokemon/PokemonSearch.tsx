@@ -79,6 +79,7 @@ export default function PokemonSearch() {
               onClick={() => {
                 setFavoritePokemon({});
                 setIsSubmitSuccessful(false);
+                setOffset(offset + limit);
               }}
             />
           </div>
