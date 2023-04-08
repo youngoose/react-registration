@@ -24,6 +24,7 @@ export default function PokemonList({
         <div
           className="border border-blue-900 bg-yellow-500 rounded-xl"
           onClick={handleChange}
+          onTouchStart={handleChange}
         >
           <li className="flex flex-col items-center text-blue-900 text-center hover:bg-basic active:bg-basic rounded-xl pb-1 font-bold">
             <img src={image} alt={name} />
