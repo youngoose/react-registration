@@ -8,9 +8,11 @@ import Button from '../ui/Button';
 import PrevNextButton from '../ui/PrevNextButton';
 import useSetUserState from '../../hooks/useSetUserState';
 import getStatesFromLocalStorage from '../../util/getStatesFromLocalStorage';
+import { useLocation } from 'react-router-dom';
 
 export default function PokemonSearch() {
   const pokemonApi = new PokemonApi();
+  const location = useLocation();
   const [pokemonList, setPokemonList] = useState([]);
   const [searchedPokemonResults, setSearchedPokemonResults] = useState([]);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(() => {
@@ -28,16 +30,26 @@ export default function PokemonSearch() {
     isLoading,
     error,
     data: pokemons,
-  } = useQuery(['pokemons', offset], () => {
-    const fetchedPokemon = pokemonApi
-      .getPokemon(offset, limit)
-      .then((initialPokemons) => {
-        setPokemonList([...pokemonList, ...initialPokemons] as any);
-        setSearchedPokemonResults([...pokemonList, ...initialPokemons] as any);
-        return initialPokemons;
-      });
-    return fetchedPokemon;
-  });
+  } = useQuery(
+    ['pokemons', offset, location],
+    () => {
+      const fetchedPokemon = pokemonApi
+        .getPokemon(offset, limit)
+        .then((initialPokemons) => {
+          setPokemonList([...pokemonList, ...initialPokemons] as any);
+          setSearchedPokemonResults([
+            ...pokemonList,
+            ...initialPokemons,
+          ] as any);
+          return initialPokemons;
+        });
+      return fetchedPokemon;
+    },
+    {
+      enabled: !!pokemonList,
+      staleTime: 10 * 60 * 1000,
+    }
+  );
 
   const onChange = (favoritePokemon: PokemonInfo) => {
     setFavoritePokemon(favoritePokemon);
@@ -78,8 +90,8 @@ export default function PokemonSearch() {
               text={'Search again?'}
               onClick={() => {
                 setFavoritePokemon({});
+                setSearchedPokemonResults(pokemonList);
                 setIsSubmitSuccessful(false);
-                setOffset(offset + limit);
               }}
             />
           </div>
