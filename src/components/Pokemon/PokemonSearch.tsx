@@ -28,16 +28,26 @@ export default function PokemonSearch() {
     isLoading,
     error,
     data: pokemons,
-  } = useQuery(['pokemons', offset], () => {
-    const fetchedPokemon = pokemonApi
-      .getPokemon(offset, limit)
-      .then((initialPokemons) => {
-        setPokemonList([...pokemonList, ...initialPokemons] as any);
-        setSearchedPokemonResults([...pokemonList, ...initialPokemons] as any);
-        return initialPokemons;
-      });
-    return fetchedPokemon;
-  });
+  } = useQuery(
+    ['pokemons', offset],
+    () => {
+      const fetchedPokemon = pokemonApi
+        .getPokemon(offset, limit)
+        .then((initialPokemons) => {
+          setPokemonList([...pokemonList, ...initialPokemons] as any);
+          setSearchedPokemonResults([
+            ...pokemonList,
+            ...initialPokemons,
+          ] as any);
+          return initialPokemons;
+        });
+      return fetchedPokemon;
+    },
+    {
+      enabled: !!pokemonList,
+      staleTime: 10 * 60 * 1000,
+    }
+  );
 
   const onChange = (favoritePokemon: PokemonInfo) => {
     setFavoritePokemon(favoritePokemon);
@@ -78,8 +88,8 @@ export default function PokemonSearch() {
               text={'Search again?'}
               onClick={() => {
                 setFavoritePokemon({});
+                setSearchedPokemonResults(pokemonList);
                 setIsSubmitSuccessful(false);
-                setOffset(offset + limit);
               }}
             />
           </div>
