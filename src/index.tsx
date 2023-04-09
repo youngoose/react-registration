@@ -5,9 +5,9 @@ import reportWebVitals from './reportWebVitals';
 import { Navigate, RouterProvider, createHashRouter } from 'react-router-dom';
 import NotFound from './pages/NotFound';
 import FavoritePokemon from './pages/FavoritePokemon';
-import Review from './pages/Review';
 import Root from './pages/Root';
 import BasicInfo from './pages/BasicInfo';
+import FinalReview from './pages/FinalReview';
 
 const router = createHashRouter([
   {
@@ -18,7 +18,7 @@ const router = createHashRouter([
       { path: '/', element: <Navigate to="/basic-info" replace /> },
       { path: '/basic-info', element: <BasicInfo /> },
       { path: '/favorite-pokemon', element: <FavoritePokemon /> },
-      { path: '/review', element: <Review /> },
+      { path: '/review', element: <FinalReview /> },
     ],
   },
 ]);
