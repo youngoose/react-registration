@@ -44,6 +44,7 @@ export default function PokemonSearch() {
       return fetchedPokemon;
     },
     {
+      keepPreviousData: true,
       enabled: !!pokemonList,
       staleTime: 10 * 60 * 1000,
     }
