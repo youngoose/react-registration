@@ -8,9 +8,11 @@ import Button from '../ui/Button';
 import PrevNextButton from '../ui/PrevNextButton';
 import useSetUserState from '../../hooks/useSetUserState';
 import getStatesFromLocalStorage from '../../util/getStatesFromLocalStorage';
+import { useLocation } from 'react-router-dom';
 
 export default function PokemonSearch() {
   const pokemonApi = new PokemonApi();
+  const location = useLocation();
   const [pokemonList, setPokemonList] = useState([]);
   const [searchedPokemonResults, setSearchedPokemonResults] = useState([]);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(() => {
@@ -29,7 +31,7 @@ export default function PokemonSearch() {
     error,
     data: pokemons,
   } = useQuery(
-    ['pokemons', offset],
+    ['pokemons', offset, location],
     () => {
       const fetchedPokemon = pokemonApi
         .getPokemon(offset, limit)
