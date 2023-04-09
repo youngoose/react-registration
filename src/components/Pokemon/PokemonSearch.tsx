@@ -28,16 +28,24 @@ export default function PokemonSearch() {
     isLoading,
     error,
     data: pokemons,
-  } = useQuery(['pokemons', offset], () => {
-    const fetchedPokemon = pokemonApi
-      .getPokemon(offset, limit)
-      .then((initialPokemons) => {
-        setPokemonList([...pokemonList, ...initialPokemons] as any);
-        setSearchedPokemonResults([...pokemonList, ...initialPokemons] as any);
-        return initialPokemons;
-      });
-    return fetchedPokemon;
-  });
+  } = useQuery(
+    ['pokemons', offset],
+    () => {
+      const fetchedPokemon = pokemonApi
+        .getPokemon(offset, limit)
+        .then((initialPokemons) => {
+          setPokemonList([...pokemonList, ...initialPokemons] as any);
+          setSearchedPokemonResults([
+            ...pokemonList,
+            ...initialPokemons,
+          ] as any);
+          return initialPokemons;
+        });
+      return fetchedPokemon;
+    },
+    // prevent refetching for 5 mins
+    { staleTime: 1000 * 60 * 0.5 }
+  );
 
   const onChange = (favoritePokemon: PokemonInfo) => {
     setFavoritePokemon(favoritePokemon);
