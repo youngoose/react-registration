@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import PokemonList from './PokemonList';
 import { PokemonInfo } from './Pokemon.model';
-import PokemonApi from '../../api/pokemonApi';
 import SearchBar from './SearchBar';
 import Button from '../ui/Button';
 import PrevNextButton from '../ui/PrevNextButton';
 import useSetUserState from '../../hooks/useSetUserState';
 import getStatesFromLocalStorage from '../../util/getStatesFromLocalStorage';
 import { useLocation } from 'react-router-dom';
+import { usePokemonApi } from '../../context/PokemonApiContext';
 
 export default function PokemonSearch() {
-  const pokemonApi = new PokemonApi();
+  const { pokemonApi } = usePokemonApi();
   const location = useLocation();
   const [pokemonList, setPokemonList] = useState([]);
   const [searchedPokemonResults, setSearchedPokemonResults] = useState([]);
@@ -35,7 +35,7 @@ export default function PokemonSearch() {
     () => {
       const fetchedPokemon = pokemonApi
         .getPokemon(offset, limit)
-        .then((initialPokemons) => {
+        .then((initialPokemons: PokemonInfo[]) => {
           setPokemonList([...pokemonList, ...initialPokemons] as any);
           setSearchedPokemonResults([
             ...pokemonList,
@@ -155,7 +155,9 @@ export default function PokemonSearch() {
               }
               text={'Show more'}
               onClick={() => {
-                setOffset(offset + limit);
+                offset + limit === 1000
+                  ? alert('Sorry, currently up to 1000 Pokemons available!')
+                  : setOffset(offset + limit);
               }}
             />
           </div>

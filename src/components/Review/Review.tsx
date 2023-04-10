@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/ui/Button';
-import getStatesFromLocalStorage from '../util/getStatesFromLocalStorage';
-import { UserFormInfo } from '../components/UserForm/UserForm.model';
-import { PokemonInfo } from '../components/Pokemon/Pokemon.model';
+import Button from '../ui/Button';
+import getStatesFromLocalStorage from '../../util/getStatesFromLocalStorage';
+import { UserFormInfo } from '../UserForm/UserForm.model';
+import { PokemonInfo } from '../Pokemon/Pokemon.model';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 
 export default function Review() {
@@ -143,7 +143,7 @@ export default function Review() {
                 type="checkbox"
                 id="agree"
                 checked={isConfirmed}
-                onClick={() => setIsConfirmed(!isConfirmed)}
+                onChange={() => setIsConfirmed(!isConfirmed)}
               />
               <label className="pl-2 sm:p-0 font-bold w-full" htmlFor="agree">
                 Check here to indicate that you have read and agree to submit
