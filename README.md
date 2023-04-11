@@ -4,7 +4,7 @@
 This application has 3 steps to complete a registration form.
 1. Basic information with regex validation
 2. Favorite pokemon using PokeApi
-3. Review where a user has availity to navigate each step to edit the info
+3. Review where a user has ability to navigate each step to edit the info
 
 # Features
 - Deep link to each step
@@ -47,7 +47,7 @@ This application has 3 steps to complete a registration form.
 
 - react-router
 
-- axio
+- axios
 
 - react-query (tanstack query)
 
