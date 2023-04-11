@@ -1,10 +1,12 @@
 # User registration form v1.0.0
 
-# Highlights & Features
+# Highlights
 This application has 3 steps to complete a registration form.
-- Basic information with regex validation
-- Favorite pokemon using PokeApi
-- Review where a user has availity to navigate each step to edit the info
+1. Basic information with regex validation
+2. Favorite pokemon using PokeApi
+3. Review where a user has availity to navigate each step to edit the info
+
+# Features
 - Deep link to each step
 - Save data on local storage
 - CI/CD using Netlify
